@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "Secure backend for ChatGPT integration",
+  "description": "Secure backend for ChatGPT integration. ",
   "main": "dist/server.js",
   "scripts": {
     "start": "node dist/server.js",

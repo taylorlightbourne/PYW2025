@@ -9,7 +9,7 @@ import {
   Platform,
   Alert
 } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import Colors from '@/constants/Colors';
 import { useData } from '@/context/DataContext';
@@ -346,96 +346,91 @@ export default function ChatScreen() {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={[styles.container, { backgroundColor: colors.background }]}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
-    >
-      <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
-      
-      {/* Header */}
-      <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.headerButton}>
-          <ChevronLeft size={24} color={colors.text} />
-        </TouchableOpacity>
-        
-        <Text style={[styles.headerTitle, { color: colors.text, fontFamily: 'Inter-SemiBold' }]} numberOfLines={1}>
-          {promptTitle}
-        </Text>
-        
-        <TouchableOpacity onPress={() => router.replace('/(tabs)')} style={styles.headerButton}>
-          <Home size={24} color={colors.text} />
-        </TouchableOpacity>
-      </View>
-      
-      {/* Messages List */}
-      <FlatList
-        ref={flatListRef}
-        data={messages}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ChatBubble message={item} />}
-        contentContainerStyle={styles.messagesList}
-        onLayout={() => flatListRef.current?.scrollToEnd({ animated: false })}
+    <>
+      <Stack.Screen
+        options={{
+          headerStyle: {
+            backgroundColor: colors.card,
+          },
+          headerTitleStyle: {
+            fontFamily: 'Inter-SemiBold',
+            color: colors.text,
+          },
+          headerTintColor: colors.text,
+          headerShadowVisible: false,
+          headerTitle: promptTitle,
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()} style={{ marginLeft: 16 }}>
+              <ChevronLeft size={24} color={colors.text} />
+            </TouchableOpacity>
+          ),
+          headerRight: () => (
+            <TouchableOpacity onPress={() => router.replace('/(tabs)')} style={{ marginRight: 16 }}>
+              <Home size={24} color={colors.text} />
+            </TouchableOpacity>
+          ),
+        }}
       />
-      
-      {/* Chat Input */}
-      <ChatInput onSend={handleSendMessage} disabled={isSending} />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={[styles.container, { backgroundColor: colors.background }]}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+      >
+        <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
+        
+        {/* Messages List */}
+        <FlatList
+          ref={flatListRef}
+          data={messages}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <ChatBubble message={item} />}
+          contentContainerStyle={styles.messagesList}
+          onLayout={() => flatListRef.current?.scrollToEnd({ animated: false })}
+        />
+        
+        {/* Chat Input */}
+        <ChatInput onSend={handleSendMessage} disabled={isSending} />
 
-      {/* Bottom Navigation */}
-      <View style={[
-        styles.bottomNav, 
-        { 
-          backgroundColor: colors.card, 
-          borderTopColor: colors.border,
-          height: Platform.OS === 'ios' ? 88 : 60,
-          paddingBottom: Platform.OS === 'ios' ? 28 : 8,
-          paddingTop: 8,
-        }
-      ]}>
-        <TouchableOpacity 
-          style={styles.navButton} 
-          onPress={() => router.replace('/(tabs)')}
-        >
-          <Home size={24} color={colors.tint} />
-        </TouchableOpacity>
+        {/* Bottom Navigation */}
+        <View style={[
+          styles.bottomNav, 
+          { 
+            backgroundColor: colors.card, 
+            borderTopColor: colors.border,
+            height: Platform.OS === 'ios' ? 88 : 60,
+            paddingBottom: Platform.OS === 'ios' ? 28 : 8,
+            paddingTop: 8,
+          }
+        ]}>
+          <TouchableOpacity 
+            style={styles.navButton} 
+            onPress={() => router.replace('/(tabs)')}
+          >
+            <Home size={24} color={colors.tint} />
+          </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={styles.navButton} 
-          onPress={() => router.replace('/(tabs)/saved')}
-        >
-          <MessageSquare size={24} color={colors.tabIconDefault} />
-        </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.navButton} 
+            onPress={() => router.replace('/(tabs)/saved')}
+          >
+            <MessageSquare size={24} color={colors.tabIconDefault} />
+          </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={styles.navButton} 
-          onPress={() => router.replace('/(tabs)/account')}
-        >
-          <User size={24} color={colors.tabIconDefault} />
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+          <TouchableOpacity 
+            style={styles.navButton} 
+            onPress={() => router.replace('/(tabs)/account')}
+          >
+            <User size={24} color={colors.tabIconDefault} />
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-  },
-  headerButton: {
-    padding: 8,
-  },
-  headerTitle: {
-    fontSize: 18,
-    flex: 1,
-    textAlign: 'center',
   },
   messagesList: {
     padding: 16,

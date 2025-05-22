@@ -1,4 +1,10 @@
-const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://10.0.0.219:3000/api';
+import { Platform } from 'react-native';
+
+// For web, use relative path; for native, use full URL
+const API_URL = Platform.select({
+  web: '/api',  // This will be handled by Firebase hosting rewrites
+  default: process.env.EXPO_PUBLIC_API_URL || 'http://10.0.0.219:3000/api'
+});
 
 export interface ChatMessage {
   role: 'user' | 'assistant';
@@ -10,7 +16,8 @@ export const sendMessage = async (messages: ChatMessage[]): Promise<string> => {
     console.log('API: Starting sendMessage request', { 
       messages, 
       url: `${API_URL}/chat/send`,
-      messageCount: messages.length 
+      messageCount: messages.length,
+      platform: Platform.OS
     });
     
     const response = await fetch(`${API_URL}/chat/send`, {

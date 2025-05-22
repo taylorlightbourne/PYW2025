@@ -22,7 +22,9 @@ const allowedOrigins = [
   'http://localhost:8081',
   'http://localhost:3000',
   'exp://192.168.200.238:8081',  // Your Expo development server
-  'exp://localhost:8081'
+  'exp://localhost:8081',
+  'https://prompt-your-way.web.app',  // Firebase hosting domain
+  'https://prompt-your-way.firebaseapp.com'  // Firebase hosting domain
 ];
 
 app.use(cors({

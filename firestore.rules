@@ -48,10 +48,10 @@ service cloud.firestore {
       allow write: if isOwner(request.resource.data.userId);
     }
     
-    // Prompts collection - Updated to allow authenticated users to read
+    // Prompts collection - Allow all authenticated users to read
     match /prompts/{promptId} {
       allow read: if isAuthenticated();
-      allow write: if false; // Keeping write access restricted
+      allow write: if false; // Keep write access restricted
     }
     
     // Default rule - deny all other access

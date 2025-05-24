@@ -24,22 +24,14 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "output": "server"
     },
     "plugins": [
       "expo-router",
       "expo-font",
       "expo-web-browser"
     ],
-    "scheme": "prompt-your-way",
-    "extra": {
-      "firebaseApiKey": "AIzaSyDDkk3CPc-F5Nq1JMPaw2Yk6WcuIwX_GTc",
-      "firebaseAuthDomain": "prompt-your-way.firebaseapp.com",
-      "firebaseProjectId": "prompt-your-way",
-      "firebaseStorageBucket": "prompt-your-way.firebasestorage.app",
-      "firebaseMessagingSenderId": "211906981774",
-      "firebaseAppId": "1:211906981774:web:feec8e6cc582c82cbb3edf",
-      "firebaseMeasurementId": "G-X5KTGY7T76"
-    }
+    "scheme": "prompt-your-way"
   }
 }

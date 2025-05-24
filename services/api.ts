@@ -2,8 +2,8 @@ import { Platform } from 'react-native';
 
 // For web, use relative path; for native, use full URL
 const API_URL = Platform.select({
-  web: '/api',  // This will be handled by Firebase hosting rewrites
-  default: process.env.EXPO_PUBLIC_API_URL || 'http://10.0.0.219:3000/api'
+  web: '/api/chat',  // This will be handled by Firebase hosting rewrites
+  default: process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000/api/chat'
 });
 
 export interface ChatMessage {
@@ -15,16 +15,15 @@ export const sendMessage = async (messages: ChatMessage[]): Promise<string> => {
   try {
     console.log('API: Starting sendMessage request', { 
       messages, 
-      url: `${API_URL}/chat/send`,
+      url: `${API_URL}/send`,
       messageCount: messages.length,
       platform: Platform.OS
     });
     
-    const response = await fetch(`${API_URL}/chat/send`, {
+    const response = await fetch(`${API_URL}/send`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${await getAuthToken()}`,
       },
       body: JSON.stringify({ messages }),
     });
@@ -37,7 +36,7 @@ export const sendMessage = async (messages: ChatMessage[]): Promise<string> => {
         status: response.status, 
         statusText: response.statusText,
         error,
-        url: `${API_URL}/chat/send`
+        url: `${API_URL}/send`
       });
       throw new Error(error.message || `Failed to send message: ${response.status} ${response.statusText}`);
     }
@@ -58,14 +57,8 @@ export const sendMessage = async (messages: ChatMessage[]): Promise<string> => {
     console.error('API: Error in sendMessage:', {
       error: error.message,
       stack: error.stack,
-      url: `${API_URL}/chat/send`
+      url: `${API_URL}/send`
     });
     throw new Error(`Failed to send message: ${error.message}`);
   }
 };
-
-// Helper function to get auth token
-const getAuthToken = async (): Promise<string> => {
-  // For now, return an empty string since we're not using authentication yet
-  return '';
-}; 

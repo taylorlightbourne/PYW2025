@@ -48,9 +48,14 @@ service cloud.firestore {
       allow write: if isOwner(request.resource.data.userId);
     }
     
+    // Prompts collection
+    match /prompts/{promptId} {
+      allow read: if isAuthenticated();
+    }
+    
     // Default rule - deny all other access
     match /{document=**} {
       allow read, write: if false;
     }
   }
-} 
+}

@@ -52,6 +52,11 @@ service cloud.firestore {
     match /prompts/{promptId} {
       allow read: if isAuthenticated();
       allow write: if false; // Keep write access restricted
+      
+      // Allow access to nested documents in the prompts collection
+      match /{document=**} {
+        allow read: if isAuthenticated();
+      }
     }
     
     // Default rule - deny all other access
